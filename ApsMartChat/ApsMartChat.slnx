@@ -1,5 +1,0 @@
-<Solution>
-  <Project Path="../ApsMartChat.Tests/ApsMartChat.Test/ApsMartChat.Test.csproj" Id="5490dcda-437f-4dab-98a5-27175aad69f7" />
-  <Project Path="ApsMartChat.csproj" />
-  <Project Path="ApsMartChat.Tests/ApsMartChat.Tests.csproj" />
-</Solution>

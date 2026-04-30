@@ -6,6 +6,7 @@ using ApsMartChat.Services.Auth;
 using ApsMartChat.Services.ChatRoom;
 using ApsMartChat.Services.File;
 using ApsMartChat.Services.Message;
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -23,7 +24,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
         builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Mappers
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddAutoMapper(cfg => cfg.AddProfile<ApsMartChat.Profiles.ChatRoomProfile>());
 
 //   JWT   
 var jwtKey = builder.Configuration["Jwt:Key"];
