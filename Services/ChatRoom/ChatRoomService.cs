@@ -20,6 +20,12 @@ public class ChatRoomService : IChatRoomService
 
     public async Task<ChatRoomResponseDTO> CriarChatRoomAsync(ChatRoomCreateDTO dto)
     {
+
+        if (string.IsNullOrWhiteSpace(dto.Name) || dto.Name.Length < 1)
+        {
+            throw new InvalidInputException("o NOME DA SALA inserido é inválido.");
+        }
+
         var room = new ChatRoom
         {
             Name = dto.Name

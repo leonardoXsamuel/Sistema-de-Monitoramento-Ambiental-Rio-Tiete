@@ -2,4 +2,4 @@
 
 namespace ApsMartChat.DTOs.ChatRoom;
 
-public record ChatRoomCreateDTO([Required][StringLength(155, MinimumLength = 4)] string Name);
+public record ChatRoomCreateDTO([Required][StringLength(155, MinimumLength = 1)] string Name);
