@@ -1,7 +1,4 @@
-﻿using ApsMartChat.DTOs.FileTransfer;
-using ApsMartChat.DTOs.Message;
-
-namespace ApsMartChat.DTOs.User;
+﻿namespace ApsMartChat.DTOs.User;
 
 public record UserResponseDTO(
     string Username,

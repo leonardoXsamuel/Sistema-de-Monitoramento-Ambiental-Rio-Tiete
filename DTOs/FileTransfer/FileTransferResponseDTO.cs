@@ -9,6 +9,6 @@ public record FileTransferResponseDTO(
     long TamanhoBytes,
     DateTime UploadedAt,
     string DownloadUrl,
-    UserResponseDTO Uploader,
-    ChatRoomResponseDTO Room
+    int? UploaderId,
+    int? RoomId
 );

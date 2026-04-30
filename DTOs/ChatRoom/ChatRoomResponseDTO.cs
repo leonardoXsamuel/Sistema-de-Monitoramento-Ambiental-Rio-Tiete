@@ -9,4 +9,5 @@ public record ChatRoomResponseDTO(
 
     ICollection<MessageResponseDTO> Messages,
     ICollection<FileTransferResponseDTO> FileTransfers
-);
+)
+{ }
