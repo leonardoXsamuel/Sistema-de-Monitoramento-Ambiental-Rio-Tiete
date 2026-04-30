@@ -2,6 +2,7 @@
 using ApsMartChat.Services.File;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace ApsMartChat.Controllers;
 
@@ -12,14 +13,17 @@ public class FilesController : ControllerBase
 {
     private readonly IFileService _files;
 
-    public FilesController(FileService files) => _files = files;
+    public FilesController(IFileService files)
+    {
+        _files = files;
+    }
 
     // Upload de arquivo para uma sala. Aceita .pdf, .docx, .xlsx (max 200 MB).
     [HttpPost("upload")]
     [RequestSizeLimit(209_715_200)] // 200 MB
-    public async Task<IActionResult> Upload(IFormFile file, [FromForm] int roomId)
+    public async Task<IActionResult> Upload([FromForm] IFormFile file, [FromForm] int roomId)
     {
-        var username = User.Identity?.Name ?? "Anonimo";
+        var username = User.FindFirst(ClaimTypes.Name)?.Value ?? throw new UnauthorizedException("Token inválido ou sem username");
         var baseUrl = $"{Request.Scheme}://{Request.Host}";
         var dto = await _files.UploadDeArquivoAsync(file, username, roomId, baseUrl);
 

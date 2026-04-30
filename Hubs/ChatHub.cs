@@ -14,10 +14,11 @@ public class ChatHub : Hub
     private readonly IChatRoomService _chatRoomService;
     private readonly ILogger<ChatHub> _logger;
 
-    public ChatHub(IMessageService messageService, ILogger<ChatHub> logger)
+    public ChatHub(IMessageService messageService, ILogger<ChatHub> logger, IChatRoomService chatRoomService)
     {
         _messageService = messageService;
         _logger = logger;
+        _chatRoomService = chatRoomService;
     }
 
     // padroniza o nome do grupo
