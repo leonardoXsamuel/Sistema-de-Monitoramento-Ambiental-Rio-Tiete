@@ -22,8 +22,4 @@ martchatDB.sqbpro
 
 .env
 
-<<<<<<< HEAD
-node_modules/
-=======
-node_modules/
->>>>>>> be19a9f9ec80f94c883d5979789faa6c1941c791
+wwwroot/
