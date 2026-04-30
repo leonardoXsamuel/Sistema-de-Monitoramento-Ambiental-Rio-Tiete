@@ -1,4 +1,3 @@
-
 using ApsMartChat.Data;
 using ApsMartChat.DTOs.Auth;
 using ApsMartChat.Exceptions;
@@ -66,30 +65,30 @@ public class AuthService : IAuthService
         );
     }
 
-    //  Gera JWT com infos do usuário 
     private string GenerateToken(User user)
     {
-        if (user is null)
-            throw new NotFoundException($"User não pode ser NULL.");
+        var secretKey = _config["Jwt:Key"] ?? throw new InvalidOperationException("JWT Key não configurada.");
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
 
-        var key = new SymmetricSecurityKey(
-            Encoding.UTF8.GetBytes(_config["Jwt:Key"]!));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var claims = new[]
         {
-            new Claim(ClaimTypes.Name, user.Username),
             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new Claim(ClaimTypes.Name, user.Username),      
             new Claim(ClaimTypes.Role, user.Role.ToString()),
-            new Claim("displayName", user.DisplayName)
+            new Claim("displayName", user.DisplayName),
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
 
-        var token = new JwtSecurityToken(
+        var tokenDescriptor = new JwtSecurityToken(
             claims: claims,
-            expires: DateTime.UtcNow.AddHours(8),
+            expires: DateTime.UtcNow.AddMinutes(120),
             signingCredentials: creds
         );
 
-        return new JwtSecurityTokenHandler().WriteToken(token);
+
+        return new JwtSecurityTokenHandler().WriteToken(tokenDescriptor);
     }
+
 }

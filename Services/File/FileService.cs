@@ -72,6 +72,11 @@ public class FileService : IFileService
         if (!await ValidarBytesIniciaisAsync(file, ext))
             throw new InvalidTypeFileException("O conteúdo do arquivo não corresponde à extensão informada.");
 
+        // valida existencia da room
+        var roomExists = await _db.ChatRooms.AnyAsync(r => r.Id == roomId);
+        if (!roomExists)
+            throw new NotFoundException($"A sala com ID {roomId} não existe.");
+
         // Salva no disco
         var uploadsPath = Path.Combine(_env.WebRootPath ?? "wwwroot", "uploads");
         Directory.CreateDirectory(uploadsPath);
