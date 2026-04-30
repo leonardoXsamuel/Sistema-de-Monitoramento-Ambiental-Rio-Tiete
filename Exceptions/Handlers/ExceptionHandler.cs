@@ -53,11 +53,15 @@ public class ExceptionHandler
         {
             await Handle(context, 400, ex.Message);
         }
+        catch (JwtKeyNotConfiguredException ex)
+        {
+            await Handle(context, 401, ex.Message);
+        }
 
         // sempre manter em ultimo. por ser a generic exception, cobre tudo
-        catch (Exception)
+        catch (Exception ex)
         {
-            await Handle(context, 500, "Erro interno no servidor");
+            await Handle(context, 500, ex.Message); 
         }
     }
 }
