@@ -57,6 +57,10 @@ public class ExceptionHandler
         {
             await Handle(context, 401, ex.Message);
         }
+        catch (InvalidInputException ex)
+        {
+            await Handle(context, 400, ex.Message);
+        }
 
         // sempre manter em ultimo. por ser a generic exception, cobre tudo
         catch (Exception ex)
