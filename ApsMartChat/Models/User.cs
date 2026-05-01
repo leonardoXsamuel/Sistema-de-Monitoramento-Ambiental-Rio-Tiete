@@ -7,6 +7,7 @@ namespace ApsMartChat.Models;
 public class User
 {
     public int Id { get; set; }
+
     [Required]
     [StringLength(155, MinimumLength = 3)]
     public string Username { get; set; } = null!;
