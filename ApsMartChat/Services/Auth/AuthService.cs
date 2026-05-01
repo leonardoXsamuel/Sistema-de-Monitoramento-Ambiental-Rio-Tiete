@@ -86,8 +86,7 @@ public class AuthService : IAuthService
             expires: DateTime.UtcNow.AddMinutes(120),
             signingCredentials: creds
         );
-
-
+        
         return new JwtSecurityTokenHandler().WriteToken(tokenDescriptor);
     }
 
