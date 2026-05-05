@@ -61,7 +61,7 @@ public class ExceptionHandler
         {
             await Handle(context, 400, ex.Message);
         }
-        catch (FileLargerThan200Mb ex)
+        catch (FileLargerThan200MbException ex)
         {
             await Handle(context, 400, ex.Message);
         }
