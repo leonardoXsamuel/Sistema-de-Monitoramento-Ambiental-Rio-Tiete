@@ -24,8 +24,4 @@
 		<ProjectReference Include="..\ApsMartChat\ApsMartChat.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="Services\MessageTests\" />
-	</ItemGroup>
-
 </Project>
