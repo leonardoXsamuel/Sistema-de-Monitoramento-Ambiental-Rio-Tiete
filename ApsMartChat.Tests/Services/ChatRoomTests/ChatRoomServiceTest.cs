@@ -116,7 +116,7 @@ public class ChatRoomServiceTest
         await _db.SaveChangesAsync();
 
         // Act
-        var result = (await _service.RetornarTodasAsChatRooms()).ToList();
+        var result = (await _service.RetornarTodasAsChatRooms(0, 0)).ToList();
 
         // Assert
         Assert.Equal(2, result.Count);
@@ -129,6 +129,6 @@ public class ChatRoomServiceTest
     public async Task Nao_Deve_Retornar_ChatRooms_Banco_Vazio()
     {
         await Assert.ThrowsAsync<NotFoundException>(
-           () => _service.RetornarTodasAsChatRooms());
+           () => _service.RetornarTodasAsChatRooms(0, 0));
     }
 }
