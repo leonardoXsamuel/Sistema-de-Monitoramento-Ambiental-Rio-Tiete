@@ -4,6 +4,7 @@ using ApsMartChat.Exceptions;
 using ApsMartChat.Models;
 using ApsMartChat.Services.ChatRoom;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 
 public class ChatRoomService : IChatRoomService
 {
@@ -45,6 +46,16 @@ public class ChatRoomService : IChatRoomService
         await _db.SaveChangesAsync();
 
         return _mapper.Map<ChatRoomResponseDTO>(chatRoomExist);
+    }
+
+    public async Task<IEnumerable<ChatRoomResponseDTO>> RetornarTodasAsChatRooms(int skip, int page)
+    {
+        var listCRsDTOs = await _db.ChatRooms.OrderBy(c => c.Id).Skip(skip).Take(page).ToListAsync();
+           
+            if (!listCRsDTOs.Any())
+                throw new NotFoundException("Não existem ChatRooms registradas.");
+
+        return listCRsDTOs.Select(cr => _mapper.Map<ChatRoomResponseDTO>(cr));
     }
 
 }
