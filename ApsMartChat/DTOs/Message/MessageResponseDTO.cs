@@ -3,9 +3,10 @@ using ApsMartChat.DTOs.User;
 
 namespace ApsMartChat.DTOs.Message;
 
-public record MessageResponseDTO (
-    string Content,
-    DateTime SentAt,
-    UserResponseDTO Sender,
-    ChatRoomResponseDTO Room
-);
+public class MessageResponseDTO
+{
+    public string Content { get; set; }
+    public DateTime SentAt { get; set; }
+    public UserResponseDTO Sender { get; set; }
+    public ChatRoomResponseDTO Room { get; set; }
+}
