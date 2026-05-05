@@ -21,11 +21,11 @@ public class FilesController : ControllerBase
     // Upload de arquivo para uma sala. Aceita .pdf, .docx, .xlsx (max 200 MB).
     [HttpPost("upload")]
     [RequestSizeLimit(209_715_200)] // 200 MB
-    public async Task<IActionResult> Upload([FromForm] IFormFile file, [FromForm] int roomId)
+    public async Task<IActionResult> Upload([FromForm] List<IFormFile> files, [FromForm] int roomId)
     {
         var username = User.FindFirst(ClaimTypes.Name)?.Value ?? throw new UnauthorizedException("Token inválido ou sem username");
         var baseUrl = $"{Request.Scheme}://{Request.Host}";
-        var dto = await _files.UploadDeArquivoAsync(file, username, roomId, baseUrl);
+        var dto = await _files.UploadDeArquivoAsync(files, username, roomId, baseUrl);
 
         return Ok(dto);
     }
