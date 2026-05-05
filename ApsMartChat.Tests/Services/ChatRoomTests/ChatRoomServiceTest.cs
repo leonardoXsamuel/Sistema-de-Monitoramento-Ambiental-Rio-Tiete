@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 
-namespace ApsMartChat.Test.ChatRoom;
+namespace ApsMartChat.Tests.Services.ChatRoom;
 
 public class ChatRoomServiceTest
 {
