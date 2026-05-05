@@ -1,6 +1,7 @@
 ﻿using ApsMartChat.Data;
 using ApsMartChat.DTOs.ChatRoom;
 using ApsMartChat.Exceptions;
+using ApsMartChat.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -103,4 +104,31 @@ public class ChatRoomServiceTest
         Assert.Equal(updateDto.Name, result.Name);
     }
 
+    [Fact]
+    public async Task Retornar_ChatRooms_Com_Exito()
+    {
+        var chatRooms = new List<Models.ChatRoom>{
+            new Models.ChatRoom { Name = "sala teste" },
+            new Models.ChatRoom { Name = "sala teste2" }
+        };
+
+        await _db.ChatRooms.AddRangeAsync(chatRooms);
+        await _db.SaveChangesAsync();
+
+        // Act
+        var result = (await _service.RetornarTodasAsChatRooms()).ToList();
+
+        // Assert
+        Assert.Equal(2, result.Count);
+
+        Assert.Equal(chatRooms[0].Name, result[0].Name);
+        Assert.Equal(chatRooms[1].Name, result[1].Name);
+    }
+
+    [Fact]
+    public async Task Nao_Deve_Retornar_ChatRooms_Banco_Vazio()
+    {
+        await Assert.ThrowsAsync<NotFoundException>(
+           () => _service.RetornarTodasAsChatRooms());
+    }
 }
