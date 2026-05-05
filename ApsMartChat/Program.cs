@@ -24,7 +24,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
         builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Mappers
-builder.Services.AddAutoMapper(cfg => cfg.AddProfile<ApsMartChat.Profiles.ChatRoomProfile>());
+builder.Services.AddAutoMapper(typeof(Program));
 
 //   JWT   
 var jwtKey = builder.Configuration["Jwt:Key"];
