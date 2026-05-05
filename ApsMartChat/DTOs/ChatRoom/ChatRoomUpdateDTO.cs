@@ -2,10 +2,9 @@
 
 namespace ApsMartChat.DTOs.ChatRoom;
 
-public record ChatRoomUpdateDTO(
-
+public class ChatRoomUpdateDTO
+{
     [Required]
     [StringLength(155, MinimumLength = 4)]
-    string Name
-
-);
+    public string Name { get; set; }
+}
