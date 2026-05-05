@@ -42,6 +42,9 @@ public class ChatRoomService : IChatRoomService
     {
         var chatRoomExist = await _db.ChatRooms.FindAsync(roomId) ?? throw new NotFoundException();
 
+        if (string.IsNullOrWhiteSpace(chatRoomUpdateDTO.Name))
+            throw new InvalidInputException("Nome inválido");
+
         chatRoomExist.Name = chatRoomUpdateDTO.Name;
         await _db.SaveChangesAsync();
 
