@@ -58,54 +58,57 @@ public class FileService : IFileService
             throw new InvalidTypeFileException();
 
         return buffer.SequenceEqual(assinatura);
-        }
+    }
 
-        public async Task<FileTransferResponseDTO> UploadDeArquivoAsync(IFormFile file, string username, int roomId, string baseUrl)
+    public async Task<FileTransferResponseDTO> UploadDeArquivoAsync(IFormFile file, string username, int roomId, string baseUrl)
+    {
+        if (file.Length > TamanhoMaxArqBytes)
+            throw new FileLargerThan200MbException("Arquivo excede 200 MB.");
+
+        if (string.IsNullOrWhiteSpace(file.FileName))
+            throw new InvalidTypeFileException();
+
+        var ext = Path.GetExtension(file.FileName);
+        if (!ExtensoesArquivosPermitidas.Contains(ext))
+            throw new InvalidTypeFileException("Tipo de arquivo não permitido. Use .pdf, .docx ou .xlsx.");
+
+        if (!await ValidarBytesIniciaisAsync(file, ext))
+            throw new InvalidTypeFileException("O conteúdo do arquivo não corresponde à extensão informada.");
+
+        // valida existencia da room
+        var roomExists = await _db.ChatRooms.AnyAsync(r => r.Id == roomId);
+        if (!roomExists)
+            throw new NotFoundException($"A sala com ID {roomId} não existe.");
+
+        // Salva no disco
+        var uploadsPath = Path.Combine(_env.WebRootPath ?? "wwwroot", "uploads");
+        Directory.CreateDirectory(uploadsPath);
+
+        var storedName = $"{Guid.NewGuid()}{ext}";
+        var fullPath = Path.Combine(uploadsPath, storedName);
+
+        await using var stream = new FileStream(fullPath, FileMode.Create);
+        await file.CopyToAsync(stream);
+
+        // Salva no banco 
+        var user = await _db.Users.FirstOrDefaultAsync(u => u.Username == username)
+            ?? throw new NotFoundException($"O usuário {username} não foi localizado.");
+
+        var transfer = new FileTransfer
         {
-            if (file.Length > TamanhoMaxArqBytes)
-                throw new FileLargerThan200Mb("Arquivo excede 200 MB.");
+            NomeOriginal = file.FileName,
+            NomeGeradoCript = storedName,
+            TipoConteudo = file.ContentType,
+            TamanhoBytes = file.Length,
+            UploaderId = user.Id,
+            RoomId = roomId
+        };
 
-            var ext = Path.GetExtension(file.FileName);
-            if (!ExtensoesArquivosPermitidas.Contains(ext))
-                throw new InvalidTypeFileException("Tipo de arquivo não permitido. Use .pdf, .docx ou .xlsx.");
+        _db.FileTransfers.Add(transfer);
+        await _db.SaveChangesAsync();
 
-            if (!await ValidarBytesIniciaisAsync(file, ext))
-                throw new InvalidTypeFileException("O conteúdo do arquivo não corresponde à extensão informada.");
-
-            // valida existencia da room
-            var roomExists = await _db.ChatRooms.AnyAsync(r => r.Id == roomId);
-            if (!roomExists)
-                throw new NotFoundException($"A sala com ID {roomId} não existe.");
-
-            // Salva no disco
-            var uploadsPath = Path.Combine(_env.WebRootPath ?? "wwwroot", "uploads");
-            Directory.CreateDirectory(uploadsPath);
-
-            var storedName = $"{Guid.NewGuid()}{ext}";
-            var fullPath = Path.Combine(uploadsPath, storedName);
-
-            await using var stream = new FileStream(fullPath, FileMode.Create);
-            await file.CopyToAsync(stream);
-
-            // Salva no banco 
-            var user = await _db.Users.FirstOrDefaultAsync(u => u.Username == username)
-                ?? throw new NotFoundException($"O usuário {username} não foi localizado.");
-
-            var transfer = new FileTransfer
-            {
-                NomeOriginal = file.FileName,
-                NomeGeradoCript = storedName,
-                TipoConteudo = file.ContentType,
-                TamanhoBytes = file.Length,
-                UploaderId = user.Id,
-                RoomId = roomId
-            };
-
-            _db.FileTransfers.Add(transfer);
-            await _db.SaveChangesAsync();
-
-            return _mapper.Map<FileTransferResponseDTO>(transfer);
-        }
+        return _mapper.Map<FileTransferResponseDTO>(transfer);
+    }
 
     public async Task<(Stream stream, string contentType, string fileName)> DownloadDeArquivoAsync(int fileId)
     {
