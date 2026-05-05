@@ -65,6 +65,10 @@ public class ExceptionHandler
         {
             await Handle(context, 400, ex.Message);
         }
+        catch (MaxFilesExceededException ex)
+        {
+            await Handle(context, 400, ex.Message);
+        }
 
         // sempre manter em ultimo. por ser a generic exception, cobre tudo
         catch (Exception ex)
