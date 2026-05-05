@@ -19,6 +19,7 @@ public class MessageService : IMessageService
     public async Task<MessageResponseDTO> SaveMessageAsync(string content, string username, int roomId)
     {
         var user = await _db.Users.FirstOrDefaultAsync(u => u.Username == username) ?? throw new NotFoundException();
+        var chatRoomId = await _db.ChatRooms.FirstOrDefaultAsync(c => c.Id == roomId) ?? throw new NotFoundException();
 
         var message = new Models.Message
         {
