@@ -37,12 +37,9 @@ public class ChatRoomController : ControllerBase
     }
 
     [HttpGet("GetAllRooms")]
-    public async Task<ActionResult<ChatRoomResponseDTO>> GetAllChatRooms(int skip, int page)
+    public async Task<ActionResult<ChatRoomResponseDTO>> GetAllChatRooms(int page, int pageSize)
     {
-        var ListDTOs = await _service.RetornarTodasAsChatRooms(skip, page);
-
-        if (!ListDTOs.Any())
-            return BadRequest();
+        var ListDTOs = await _service.RetornarTodasAsChatRooms(page, pageSize);
 
         return Ok(ListDTOs);
     }
