@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import type { AuthResponse } from '../types/types'
+import type { AuthResponse } from '../types/Types'
  
 interface AuthState {
   token: string | null
@@ -12,10 +12,10 @@ interface AuthState {
 }
  
 export const useAuthStore = create<AuthState>((set) => ({
-  token:           localStorage.getItem('token'),
-  username:        localStorage.getItem('username'),
-  displayName:     localStorage.getItem('displayName'),
-  role:            localStorage.getItem('role') as 'Inspetor' | 'Coordenador' | null,
+  token: localStorage.getItem('token'),
+  username: localStorage.getItem('username'),
+  displayName: localStorage.getItem('displayName'),
+  role: localStorage.getItem('role') as 'Inspetor' | 'Coordenador' | null,
   isAuthenticated: !!localStorage.getItem('token'),
  
   login: (data) => {
@@ -24,10 +24,10 @@ export const useAuthStore = create<AuthState>((set) => ({
     localStorage.setItem('displayName', data.displayName)
     localStorage.setItem('role',        data.role)
     set({
-      token:           data.token,
-      username:        data.username,
-      displayName:     data.displayName,
-      role:            data.role,
+      token: data.token,
+      username: data.username,
+      displayName: data.displayName,
+      role: data.role,
       isAuthenticated: true,
     })
   },

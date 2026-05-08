@@ -2,9 +2,9 @@ import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { Droplets, Lock, User, Leaf, BadgeCheck } from 'lucide-react'
 import toast from 'react-hot-toast'
-import api from '../services/api'
-import { useAuthStore } from '../store/authStore'
-import type { AuthResponse } from '../types/types'
+import api from '../services/Api'
+import { useAuthStore } from '../store/AuthStore'
+import type { AuthResponse } from '../types/Types'
 import styles from './AuthPage.module.css'
 
 export default function RegisterPage() {
