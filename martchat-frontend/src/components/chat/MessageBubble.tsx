@@ -1,4 +1,4 @@
-import type { MessageResponseDTO } from '../../types/types'
+import type { MessageResponseDTO } from '../../types/Types'
 import styles from './MessageBubble.module.css'
 
 interface Props {
@@ -6,10 +6,20 @@ interface Props {
   isOwn: boolean
 }
 
-function formatTime(iso: string) {
+function formatDataTime(dateString: string) {
   try {
-    return new Date(iso).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
-  } catch { return '' }
+    const date = new Date(dateString);
+
+    return date.toLocaleString("pt-BR", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  } catch {
+    return "";
+  }
 }
 
 export default function MessageBubble({ message, isOwn }: Props) {
@@ -29,7 +39,7 @@ export default function MessageBubble({ message, isOwn }: Props) {
         )}
         <div className={`${styles.bubble} ${isOwn ? styles.bubbleOwn : styles.bubbleOther}`}>
           <p className={styles.text}>{message.content}</p>
-          <span className={styles.time}>{formatTime(message.sentAt)}</span>
+          <span className={styles.time}>{formatDataTime(message.sentAt)}</span>
         </div>
       </div>
     </div>

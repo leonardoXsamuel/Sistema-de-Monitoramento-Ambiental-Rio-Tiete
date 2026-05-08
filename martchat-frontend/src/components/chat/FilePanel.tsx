@@ -1,5 +1,5 @@
 import { X, Download, FileText, FileSpreadsheet, File } from 'lucide-react'
-import { useChatStore } from '../../store/chatStore'
+import { useChatStore } from '../../store/ChatStore'
 import styles from './FilePanel.module.css'
 
 interface Props {

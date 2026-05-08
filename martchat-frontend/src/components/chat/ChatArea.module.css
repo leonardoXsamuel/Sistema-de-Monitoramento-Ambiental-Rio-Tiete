@@ -187,3 +187,18 @@
 }
 .sendBtn:hover:not(:disabled) { opacity: 0.85; transform: scale(1.05); }
 .sendBtn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .header { padding: 12px 16px; }
+  .headerTitle { font-size: 14px; }
+  .messages { padding: 12px 16px; }
+  .inputBar { padding: 10px 16px; }
+
+  .iconBtn span { display: none; }
+  .iconBtn { padding: 7px; }
+}
+
+@media (max-width: 480px) {
+  .content { max-width: 85%; }
+}

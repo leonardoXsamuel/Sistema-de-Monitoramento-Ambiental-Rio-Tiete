@@ -2,8 +2,8 @@ import { useEffect } from 'react'
 import { useSignalR } from '../hooks/useSignalR'
 import { useChatStore } from '../store/ChatStore'
 import api from '../services/api'
-import Sidebar from '../components/layout/sideBar'
-import ChatArea from '../components/chat/chatArea'
+import Sidebar from '../components/layout/SideBar'
+import ChatArea from '../components/chat/ChatArea'
 import styles from './ChatPage.module.css'
 
 export default function ChatPage() {
