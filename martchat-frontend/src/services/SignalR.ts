@@ -31,7 +31,7 @@ export async function stopConnection(): Promise<void> {
   }
 }
  
-// ── Métodos do Hub ─────────────────────────────────────────────────────────────
+// Métodos do Hub 
 export const hubActions = {
   entrarNoChatRoom: (roomId: number) =>
     getConnection().invoke('EntrarNoChatRoom', roomId),
