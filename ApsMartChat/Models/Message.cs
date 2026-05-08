@@ -9,7 +9,7 @@ public class Message
     public string Content { get; set; } = string.Empty;
     
     [StringLength(400, MinimumLength = 1), Required]
-    public DateTime SentAt { get; set; }
+    public DateTimeOffset SentAt { get; set; }
 
     public int SenderId { get; set; }
     [Required]

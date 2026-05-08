@@ -5,7 +5,7 @@ namespace ApsMartChat.DTOs.ChatRoom;
 
 public record ChatRoomResponseDTO(
     string Name,
-    DateTime CreatedAt,
+    DateTimeOffset CreatedAt,
 
     ICollection<MessageResponseDTO> Messages,
     ICollection<FileTransferResponseDTO> FileTransfers
