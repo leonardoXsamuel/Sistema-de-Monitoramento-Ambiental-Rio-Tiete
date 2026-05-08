@@ -1,63 +1,93 @@
-import { useState } from 'react'
-import { Droplets, Plus, LogOut, Wifi, WifiOff, ChevronRight, Leaf, Hash } from 'lucide-react'
-import toast from 'react-hot-toast'
-import { useAuthStore } from '../../store/authStore'
-import { useChatStore } from '../../store/chatStore'
-import { hubActions, stopConnection } from '../../services/signalR'
-import api from '../../services/api'
-import { useNavigate } from 'react-router-dom'
-import styles from './Sidebar.module.css'
+import { useState } from "react";
+import {
+  Droplets,
+  Plus,
+  LogOut,
+  Wifi,
+  WifiOff,
+  ChevronRight,
+  Leaf,
+  Hash,
+} from "lucide-react";
+import toast from "react-hot-toast";
+import { useAuthStore } from "../../store/AuthStore";
+import { useChatStore } from "../../store/ChatStore";
+import { hubActions, stopConnection } from "../../services/SignalR";
+import api from "../../services/Api";
+import { useNavigate } from "react-router-dom";
+import styles from "./Sidebar.module.css";
+import { getConnection, startConnection } from '../../services/SignalR'
 
 export default function Sidebar() {
-  const navigate = useNavigate()
-  const { displayName, role, logout } = useAuthStore()
-  const { rooms, currentRoomId, setCurrentRoom, setMessages, setFiles, connected, addRoom } = useChatStore()
-  const [creating, setCreating] = useState(false)
-  const [newRoomName, setNewRoomName] = useState('')
+  const navigate = useNavigate();
+  const { displayName, role, logout } = useAuthStore();
+  const {
+    rooms,
+    currentRoomId,
+    setCurrentRoom,
+    setMessages,
+    setFiles,
+    connected,
+    addRoom,
+  } = useChatStore();
+  const [creating, setCreating] = useState(false);
+  const [newRoomName, setNewRoomName] = useState("");
 
   async function enterRoom(roomId: number) {
-    if (currentRoomId === roomId) return
+    if (currentRoomId === roomId) return;
+
+    const conn = getConnection();
+
+    // garante conexão
+    if (conn.state !== "Connected") {
+      await startConnection();
+    }
 
     // Sai da sala atual
     if (currentRoomId !== null) {
-      try { await hubActions.sairDoChatRoom(currentRoomId) } catch {}
+      try {
+        await hubActions.sairDoChatRoom(currentRoomId);
+      } catch {}
     }
 
-    setCurrentRoom(roomId)
-
-    // Entra na nova sala via SignalR
-    try { await hubActions.entrarNoChatRoom(roomId) } catch {}
+    setCurrentRoom(roomId);
 
     // Carrega histórico de mensagens
     try {
-      const { data } = await api.get(`/api/rooms/${roomId}/messages`)
-      setMessages(Array.isArray(data) ? data : [])
-    } catch { setMessages([]) }
+      const { data } = await api.get(`/api/rooms/${roomId}/messages`);
+      setMessages(Array.isArray(data) ? data : []);
+    } catch {
+      setMessages([]);
+    }
 
     // Carrega arquivos da sala
     try {
-      const { data } = await api.get(`/api/files/room/${roomId}`)
-      setFiles(Array.isArray(data) ? data : [])
-    } catch { setFiles([]) }
+      const { data } = await api.get(`/api/files/room/${roomId}`);
+      setFiles(Array.isArray(data) ? data : []);
+    } catch {
+      setFiles([]);
+    }
   }
 
   async function createRoom() {
-    if (!newRoomName.trim()) return
+    if (!newRoomName.trim()) return;
     try {
-      const { data } = await api.post('/api/ChatRoom/createChatRoom', { name: newRoomName.trim() })
-      addRoom({ ...data, id: data.id ?? Date.now() })
-      toast.success(`Sala "${newRoomName}" criada!`)
-      setNewRoomName('')
-      setCreating(false)
+      const { data } = await api.post("/api/ChatRoom/createChatRoom", {
+        name: newRoomName.trim(),
+      });
+      addRoom({ ...data, id: data.id ?? Date.now() });
+      toast.success(`Sala "${newRoomName}" criada!`);
+      setNewRoomName("");
+      setCreating(false);
     } catch {
-      toast.error('Erro ao criar sala.')
+      toast.error("Erro ao criar sala.");
     }
   }
 
   async function handleLogout() {
-    await stopConnection()
-    logout()
-    navigate('/login')
+    await stopConnection();
+    logout();
+    navigate("/login");
   }
 
   return (
@@ -71,10 +101,17 @@ export default function Sidebar() {
           <div>
             <span className={styles.brandName}>MartChat</span>
             <div className={styles.statusRow}>
-              {connected
-                ? <><Wifi size={10} className={styles.online} /><span className={styles.statusText}>Online</span></>
-                : <><WifiOff size={10} className={styles.offline} /><span className={styles.statusText}>Reconectando...</span></>
-              }
+              {connected ? (
+                <>
+                  <Wifi size={10} className={styles.online} />
+                  <span className={styles.statusText}>Online</span>
+                </>
+              ) : (
+                <>
+                  <WifiOff size={10} className={styles.offline} />
+                  <span className={styles.statusText}>Reconectando...</span>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -90,8 +127,12 @@ export default function Sidebar() {
       <div className={styles.section}>
         <div className={styles.sectionHeader}>
           <span>SALAS DE INSPEÇÃO</span>
-          {role === 'Coordenador' && (
-            <button className={styles.addBtn} onClick={() => setCreating(!creating)} title="Nova sala">
+          {role === "Coordenador" && (
+            <button
+              className={styles.addBtn}
+              onClick={() => setCreating(!creating)}
+              title="Nova sala"
+            >
               <Plus size={14} />
             </button>
           )}
@@ -105,10 +146,12 @@ export default function Sidebar() {
               value={newRoomName}
               onChange={(e) => setNewRoomName(e.target.value)}
               className={styles.createInput}
-              onKeyDown={(e) => e.key === 'Enter' && createRoom()}
+              onKeyDown={(e) => e.key === "Enter" && createRoom()}
               autoFocus
             />
-            <button className={styles.createBtn} onClick={createRoom}>Criar</button>
+            <button className={styles.createBtn} onClick={createRoom}>
+              Criar
+            </button>
           </div>
         )}
 
@@ -119,12 +162,14 @@ export default function Sidebar() {
           {rooms.map((room) => (
             <button
               key={room.id}
-              className={`${styles.room} ${currentRoomId === room.id ? styles.roomActive : ''}`}
+              className={`${styles.room} ${currentRoomId === room.id ? styles.roomActive : ""}`}
               onClick={() => enterRoom(room.id)}
             >
               <Hash size={14} className={styles.roomHash} />
               <span className={styles.roomName}>{room.name}</span>
-              {currentRoomId === room.id && <ChevronRight size={14} className={styles.roomArrow} />}
+              {currentRoomId === room.id && (
+                <ChevronRight size={14} className={styles.roomArrow} />
+              )}
             </button>
           ))}
         </div>
@@ -133,16 +178,22 @@ export default function Sidebar() {
       {/* Perfil */}
       <div className={styles.profile}>
         <div className={styles.avatar}>
-          {displayName?.[0]?.toUpperCase() ?? 'U'}
+          {displayName?.[0]?.toUpperCase() ?? "U"}
         </div>
         <div className={styles.profileInfo}>
           <span className={styles.profileName}>{displayName}</span>
-          <span className={styles.profileRole}>{role === 'Coordenador' ? 'Coordenador' : 'Inspetor'}</span>
+          <span className={styles.profileRole}>
+            {role === "Coordenador" ? "Coordenador" : "Inspetor"}
+          </span>
         </div>
-        <button className={styles.logoutBtn} onClick={handleLogout} title="Sair">
+        <button
+          className={styles.logoutBtn}
+          onClick={handleLogout}
+          title="Sair"
+        >
           <LogOut size={16} />
         </button>
       </div>
     </aside>
-  )
+  );
 }

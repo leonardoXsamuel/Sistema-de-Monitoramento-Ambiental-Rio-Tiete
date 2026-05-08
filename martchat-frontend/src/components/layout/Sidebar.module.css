@@ -192,3 +192,31 @@
   flex-shrink: 0;
 }
 .logoutBtn:hover { color: #e74c3c; border-color: #e74c3c; }
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100%;
+    height: auto;
+    max-height: 220px;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .rooms {
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 4px 8px 8px;
+    gap: 6px;
+  }
+
+  .room {
+    flex-shrink: 0;
+    white-space: nowrap;
+    padding: 7px 12px;
+  }
+
+  .section { overflow: hidden; }
+}
