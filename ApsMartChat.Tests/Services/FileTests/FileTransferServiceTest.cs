@@ -56,6 +56,9 @@ public class FileTransferServiceTest
             ContentType = "application/pdf"
         };
 
+        List<IFormFile> FilesList = new List<IFormFile>();
+        FilesList.Add(file);
+
         // adicionando usuario no banco
         _db.Users.Add(new User
         {
@@ -70,10 +73,13 @@ public class FileTransferServiceTest
         await _db.SaveChangesAsync();
 
         // act
-        var result = await _service.UploadDeArquivoAsync(file, "leoxsamuel1", 1, "");
+        var result = await _service.UploadDeArquivoAsync(FilesList, "leoxsamuel1", 1, "");
 
         Assert.NotNull(result);
-        Assert.Equal("teste.pdf", result.NomeOriginal);
+        for (int i = 0; i < FilesList.Count(); i++)
+        {
+            Assert.Equal("teste.pdf", result[i].NomeOriginal);
+        }
     }
 
     [Fact]
@@ -90,6 +96,9 @@ public class FileTransferServiceTest
             ContentType = "application/pdf"
         };
 
+        List<IFormFile> FilesList = new List<IFormFile>();
+        FilesList.Add(file);
+
         // adicionando usuario no banco
         _db.Users.Add(new User
         {
@@ -105,7 +114,7 @@ public class FileTransferServiceTest
 
         // act
         await Assert.ThrowsAsync<InvalidTypeFileException>(
-                    () => (_service.UploadDeArquivoAsync(file, "leoxsamuel1", 1, "")));
+                    () => (_service.UploadDeArquivoAsync(FilesList, "leoxsamuel1", 1, "")));
     }
 
     [Fact]
@@ -117,6 +126,9 @@ public class FileTransferServiceTest
         mockfile.Setup(f => f.FileName).Returns("arquivo_maior_do_que_200mb.pdf");
 
         IFormFile file = mockfile.Object;
+
+        List<IFormFile> FilesList = new List<IFormFile>();
+        FilesList.Add(file);
 
         // criar chat room e usuario
         _db.Users.Add(new User
@@ -136,7 +148,7 @@ public class FileTransferServiceTest
         await _db.SaveChangesAsync();
 
         await Assert.ThrowsAsync<FileLargerThan200MbException>(
-            () => (_service.UploadDeArquivoAsync(file, "LeonardoXSamuel", 1, "")));
+            () => (_service.UploadDeArquivoAsync(FilesList, "LeonardoXSamuel", 1, "")));
     }
 
     [Fact]
@@ -150,6 +162,9 @@ public class FileTransferServiceTest
         mockfile.Setup(f => f.FileName).Returns("arquivo_tipo_nao_permitido.git");
 
         IFormFile file = mockfile.Object;
+
+        List<IFormFile> FilesList = new List<IFormFile>();
+        FilesList.Add(file);
 
         // criar chat room e usuario
         _db.Users.Add(new User
@@ -169,7 +184,7 @@ public class FileTransferServiceTest
         await _db.SaveChangesAsync();
 
         await Assert.ThrowsAsync<InvalidTypeFileException>(
-            () => (_service.UploadDeArquivoAsync(file, "LeonardoXSamuel", 1, "")));
+            () => (_service.UploadDeArquivoAsync(FilesList, "LeonardoXSamuel", 1, "")));
     }
 
     [Fact]
@@ -185,6 +200,9 @@ public class FileTransferServiceTest
             ContentType = "application/pdf"
         };
 
+        List<IFormFile> FilesList = new List<IFormFile>();
+        FilesList.Add(file);
+
         // criar chat room e usuario
         _db.Users.Add(new User
         {
@@ -203,7 +221,7 @@ public class FileTransferServiceTest
         await _db.SaveChangesAsync();
 
         await Assert.ThrowsAsync<NotFoundException>(
-           () => (_service.UploadDeArquivoAsync(file, "LeonardoXSamuel", 101, "")));
+           () => (_service.UploadDeArquivoAsync(FilesList, "LeonardoXSamuel", 101, "")));
     }
 
     [Fact]
@@ -219,6 +237,9 @@ public class FileTransferServiceTest
             ContentType = "application/pdf"
         };
 
+        List<IFormFile> FilesList = new List<IFormFile>();
+        FilesList.Add(file);
+
         // criar chat room e usuario
         _db.Users.Add(new User
         {
@@ -237,7 +258,7 @@ public class FileTransferServiceTest
         await _db.SaveChangesAsync();
 
         await Assert.ThrowsAsync<NotFoundException>(
-           () => (_service.UploadDeArquivoAsync(file, "sarahXrabettiC", 1, "")));
+           () => (_service.UploadDeArquivoAsync(FilesList, "sarahXrabettiC", 1, "")));
     }
 
     // Testes de Download de Arquivo
@@ -257,6 +278,9 @@ public class FileTransferServiceTest
             ContentType = "application/pdf"
         };
 
+        List<IFormFile> FilesList = new List<IFormFile>();
+        FilesList.Add(file);
+
         // adicionando usuario no banco
         _db.Users.Add(new User
         {
@@ -269,7 +293,7 @@ public class FileTransferServiceTest
         _db.ChatRooms.Add(new Models.ChatRoom { Name = "tste sala" });
         await _db.SaveChangesAsync();
 
-        var result = await _service.UploadDeArquivoAsync(file, "leoxsamuel1", 1, "");
+        var result = await _service.UploadDeArquivoAsync(FilesList, "leoxsamuel1", 1, "");
 
         // fazer dowload
         FileTransfer fileInBD = await _db.FileTransfers.FirstOrDefaultAsync(f => f.Id == 1);
@@ -304,6 +328,9 @@ public class FileTransferServiceTest
             ContentType = "application/pdf"
         };
 
+        List<IFormFile> FilesList = new List<IFormFile>();
+        FilesList.Add(file);
+
         // adicionando usuario no banco
         _db.Users.Add(new User
         {
@@ -315,7 +342,7 @@ public class FileTransferServiceTest
 
         _db.ChatRooms.Add(new Models.ChatRoom { Name = "tsste sala" });
         await _db.SaveChangesAsync();
-        await _service.UploadDeArquivoAsync(file, "leoxsamuel1", 1, "");
+        await _service.UploadDeArquivoAsync(FilesList, "leoxsamuel1", 1, "");
 
         // act => fazer dowload
         await Assert.ThrowsAsync<NotFoundException>(
@@ -374,6 +401,10 @@ public class FileTransferServiceTest
             ContentType = "application/pdf"
         };
 
+        List<IFormFile> FilesList = new List<IFormFile>();
+        FilesList.Add(file);
+        FilesList.Add(file2);
+
         // adicionando usuario no banco
         _db.Users.Add(new User
         {
@@ -384,8 +415,7 @@ public class FileTransferServiceTest
         });
         await _db.SaveChangesAsync();
 
-        await _service.UploadDeArquivoAsync(file, "leoxsamuel1", ChatRoom.Id, "");
-        await _service.UploadDeArquivoAsync(file2, "leoxsamuel1", ChatRoom.Id, "");
+        await _service.UploadDeArquivoAsync(FilesList, "leoxsamuel1", ChatRoom.Id, "");
         await _db.SaveChangesAsync();
 
         List<FileTransferResponseDTO> ListFilesInRoom = await _service
@@ -423,6 +453,11 @@ public class FileTransferServiceTest
             ContentType = "application/pdf"
         };
 
+
+        List<IFormFile> FilesList = new List<IFormFile>();
+        FilesList.Add(file);
+        FilesList.Add(file2);
+
         // adicionando usuario no banco
         _db.Users.Add(new User
         {
@@ -433,8 +468,7 @@ public class FileTransferServiceTest
         });
         await _db.SaveChangesAsync();
 
-        await _service.UploadDeArquivoAsync(file, "leoxsamuel1", ChatRoom.Id, "");
-        await _service.UploadDeArquivoAsync(file2, "leoxsamuel1", ChatRoom.Id, "");
+        await _service.UploadDeArquivoAsync(FilesList, "leoxsamuel1", ChatRoom.Id, "");
         await _db.SaveChangesAsync();
 
         await Assert.ThrowsAsync<NotFoundException>(
