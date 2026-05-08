@@ -7,4 +7,9 @@ public class ChatRoomUpdateDTO
     [Required]
     [StringLength(155, MinimumLength = 4)]
     public string Name { get; set; }
+
+    public ChatRoomUpdateDTO(string name)
+    {
+        Name = name;
+    }
 }
