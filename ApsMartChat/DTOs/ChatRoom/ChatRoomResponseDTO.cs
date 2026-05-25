@@ -4,6 +4,7 @@ using ApsMartChat.DTOs.Message;
 namespace ApsMartChat.DTOs.ChatRoom;
 
 public record ChatRoomResponseDTO(
+    int Id,
     string Name,
     DateTime CreatedAt,
 

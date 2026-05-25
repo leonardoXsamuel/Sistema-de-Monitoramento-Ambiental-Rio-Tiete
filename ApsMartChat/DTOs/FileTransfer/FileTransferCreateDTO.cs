@@ -17,7 +17,7 @@ public record FileTransferCreateDTO
     [Required]
     public long TamanhoBytes { get; }   
     
-    public DateTime UploadedAt { get; set; } = DateTime.UtcNow;
+    public DateTime UploadedAt { get; set; } = DateTime.Now;
 
     public int UploaderId { get; set; }
     public UserCreateDTO Uploader { get; set; } = null!;

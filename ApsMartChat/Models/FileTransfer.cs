@@ -12,7 +12,7 @@ public class FileTransfer
     
     [Required]
     public long TamanhoBytes { get; set; }
-    public DateTime UploadedAt { get; set; } = DateTime.UtcNow;
+    public DateTime UploadedAt { get; set; } = DateTime.Now;
 
     public int UploaderId { get; set; }
     [Required]

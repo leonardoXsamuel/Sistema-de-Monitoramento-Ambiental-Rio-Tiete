@@ -18,7 +18,7 @@ public class User
 
     public string PasswordHash { get; set; } = null!;
     public UserRole Role { get; set; } = UserRole.Inspetor; // inspetor | coordenador
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime CreatedAt { get; set; } = DateTime.Now;
     public ICollection<Message> Messages { get; set; } = new List<Message>();
     public ICollection<FileTransfer> FileTransfers { get; set; } = new List<FileTransfer>();
 }

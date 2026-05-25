@@ -29,11 +29,13 @@ public class MessageService : IMessageService
             Content = content,
             SenderId = user.Id,
             RoomId = roomId,
-            SentAt = DateTime.UtcNow
+            SentAt = DateTime.Now
         };
 
         _db.Messages.Add(message);
         await _db.SaveChangesAsync();
+
+        await _db.Entry(message).Reference(m => m.Sender).LoadAsync();
 
         return _mapper.Map<MessageResponseDTO>(message);
     }

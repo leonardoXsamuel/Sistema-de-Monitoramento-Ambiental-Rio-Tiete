@@ -11,6 +11,7 @@ public class MessageProfile : Profile
     {
         CreateMap<MessageCreateDTO, Message>();
         CreateMap<MessageUpdateDTO, Message>();
-        CreateMap<Message, MessageResponseDTO>();
+        CreateMap<Message, MessageResponseDTO>()
+            .ForMember(dest => dest.Room, opt => opt.Ignore());
     }
 }

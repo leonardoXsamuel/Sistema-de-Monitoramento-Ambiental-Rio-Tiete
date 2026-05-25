@@ -36,14 +36,14 @@ public class ChatHub : Hub
     {
         await Groups.AddToGroupAsync(Context.ConnectionId, RoomGroup(roomId));
         await Clients.Group(RoomGroup(roomId))
-            .SendAsync("UsuarioEntrou", $"Usuario{Context.User?.Identity?.Name ?? "Anônimo"} entrou na sala {roomId}");
+            .SendAsync("UsuarioEntrou", $"Usuario {Context.User?.Identity?.Name ?? "Anônimo"} entrou na sala {roomId}");
     }
 
     public async Task SairDoChatRoom(int roomId)
     {
         await Groups.RemoveFromGroupAsync(Context.ConnectionId, RoomGroup(roomId));
         await Clients.Group(RoomGroup(roomId))
-            .SendAsync("UsuarioSaiu", $"Usuario{Context.User?.Identity?.Name ?? "Anônimo"} saiu da sala {roomId}");
+            .SendAsync("UsuarioSaiu", $"Usuario {Context.User?.Identity?.Name ?? "Anônimo"} saiu da sala {roomId}");
     }
 
     //  Enviar mensagem 
@@ -61,7 +61,7 @@ public class ChatHub : Hub
     public async Task NotificaçãoDeArquivoCarregado(FileTransferResponseDTO file, int roomId)
     {
         await Clients.Group(RoomGroup(roomId))
-            .SendAsync("ArquivoDisponível", file);
+            .SendAsync("ArquivoDisponivel", file);
     }
 
     //  Indicador de digitação 
@@ -69,7 +69,7 @@ public class ChatHub : Hub
     {
         var username = Context.User!.Identity!.Name;
         await Clients.OthersInGroup(RoomGroup(roomId))
-            .SendAsync("UsuárioDigitando", $"Usuario{username ?? "Anônimo"} está digitando", isTyping);
+            .SendAsync("UsuarioDigitando", $"Usuario {username ?? "Anônimo"} está digitando", isTyping);
     }
 
     //  Desconexão da sala

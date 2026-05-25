@@ -9,7 +9,7 @@ public class ChatRoom
     [Required, StringLength(55, MinimumLength = 1)]
     public string Name { get; set; } = string.Empty;
 
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime CreatedAt { get; set; } = DateTime.Now;
     public ICollection<Message> Messages { get; set; } = new List<Message>();
     public ICollection<FileTransfer> FileTransfers { get; set; } = new List<FileTransfer>();
 }

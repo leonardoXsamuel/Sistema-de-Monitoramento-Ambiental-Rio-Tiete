@@ -75,8 +75,12 @@ builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddScoped<IChatRoomService, ChatRoomService>();
 builder.Services.AddScoped<IMessageService, MessageService>();
 
-//   SignalR  
-builder.Services.AddSignalR();
+//   SignalR
+builder.Services.AddSignalR()
+    .AddJsonProtocol(options =>
+    {
+        options.PayloadSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
+    });
 
 // ajuste para UserRole não vir como int
 builder.Services.AddControllers()
