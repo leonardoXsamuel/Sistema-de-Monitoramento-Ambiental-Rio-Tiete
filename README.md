@@ -214,4 +214,4 @@ React: handleSend()
 
 ## Autores
 
-Desenvolvido por alunos do curso de Ciência da Computação — APS 2025.
+Desenvolvido por alunos do curso de Ciência da Computação — APS 2026.
