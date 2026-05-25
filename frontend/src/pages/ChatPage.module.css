@@ -1,0 +1,18 @@
+.layout {
+  display: flex;
+  height: 100%;
+  overflow: hidden;
+}
+
+.main {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  background: var(--bg-primary);
+}
+
+@media (max-width: 640px) {
+  .layout {
+    flex-direction: column;
+  }
+}
