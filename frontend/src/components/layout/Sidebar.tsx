@@ -39,7 +39,6 @@ export default function Sidebar({ onSelectRoom }: Props) {
     <aside className={styles.sidebar}>
       <div className={styles.header}>
         <div className={styles.appName}>
-          <span>🌿</span>
           <span>MartChat</span>
         </div>
         <p className={styles.tagline}>Monitoramento Ambiental</p>
