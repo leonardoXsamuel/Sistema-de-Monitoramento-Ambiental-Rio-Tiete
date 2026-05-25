@@ -7,6 +7,7 @@ import { getFilesByRoom } from '../../api/files';
 import MessageBubble from './MessageBubble';
 import FileUploadButton from './FileUploadButton';
 import ConnectionStatus from '../ui/ConnectionStatus';
+import Toast from '../ui/Toast';
 import type { FileTransfer } from '../../types/types';
 import type * as signalR from '@microsoft/signalr';
 import styles from './ChatArea.module.css';
@@ -16,17 +17,20 @@ interface Props {
   sendTyping: (roomId: number, isTyping: boolean) => void;
   notifyFileUploaded: (file: FileTransfer, roomId: number) => void;
   connectionRef: React.RefObject<signalR.HubConnection | null>;
+  onBack?: () => void;
 }
 
-export default function ChatArea({ sendMessage, sendTyping, notifyFileUploaded, connectionRef }: Props) {
+export default function ChatArea({ sendMessage, sendTyping, notifyFileUploaded, connectionRef, onBack }: Props) {
   const { activeRoom, messages, files, typingUsers, setMessages, setFiles, addFile, addMessage } =
     useChatStore();
   const { user } = useAuthStore();
   const [text, setText] = useState('');
   const [showEmoji, setShowEmoji] = useState(false);
   const [showFiles, setShowFiles] = useState(false);
+  const [toasts, setToasts] = useState<{ id: number; name: string }[]>([]);
   const bottomRef = useRef<HTMLDivElement>(null);
   const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const toastIdRef = useRef(0);
 
   useEffect(() => {
     if (!activeRoom) return;
@@ -89,8 +93,12 @@ export default function ChatArea({ sendMessage, sendTyping, notifyFileUploaded, 
     uploaded.forEach((f) => {
       addFile(f);
       if (activeRoom) notifyFileUploaded(f, activeRoom.id);
+      const id = ++toastIdRef.current;
+      setToasts((prev) => [...prev, { id, name: f.nomeOriginal }]);
     });
   };
+
+  const removeToast = (id: number) => setToasts((prev) => prev.filter((t) => t.id !== id));
 
   const formatBytes = (b: number) => {
     if (b < 1024) return `${b} B`;
@@ -108,8 +116,17 @@ export default function ChatArea({ sendMessage, sendTyping, notifyFileUploaded, 
 
   return (
     <div className={styles.container}>
+      {toasts.map((t) => (
+        <Toast key={t.id} message={`${t.name} enviado`} onDone={() => removeToast(t.id)} />
+      ))}
+
       <header className={styles.header}>
         <div className={styles.headerLeft}>
+          {onBack && (
+            <button className={styles.backBtn} onClick={onBack} title="Voltar">
+              ‹
+            </button>
+          )}
           <span className={styles.roomHash}>#</span>
           <span className={styles.roomName}>{activeRoom.name}</span>
         </div>

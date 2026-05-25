@@ -4,15 +4,27 @@
   overflow: hidden;
 }
 
+.sidebarWrapper {
+  flex-shrink: 0;
+}
+
 .main {
   flex: 1;
   display: flex;
   overflow: hidden;
-  background: var(--bg-primary);
+  min-width: 0;
 }
 
 @media (max-width: 640px) {
-  .layout {
-    flex-direction: column;
+  .hideMobile {
+    display: none;
+  }
+
+  .sidebarWrapper {
+    width: 100%;
+  }
+
+  .main {
+    width: 100%;
   }
 }

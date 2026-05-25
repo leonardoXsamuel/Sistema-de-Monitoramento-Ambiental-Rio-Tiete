@@ -1,0 +1,38 @@
+.toast {
+  position: fixed;
+  bottom: 5rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(1rem);
+  background: var(--bg-elevated);
+  border: 1px solid var(--green-mid);
+  border-radius: var(--radius-lg);
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.82rem;
+  color: var(--text-primary);
+  box-shadow: var(--shadow);
+  opacity: 0;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  z-index: 9999;
+  pointer-events: none;
+  white-space: nowrap;
+  max-width: 90vw;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.icon {
+  flex-shrink: 0;
+}
+
+.text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

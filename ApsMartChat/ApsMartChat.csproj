@@ -4,10 +4,7 @@
 		<TargetFramework>net8.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
-		<ContainerRuntimeIdentifier>win-x64</ContainerRuntimeIdentifier>
-		<EnableSdkContainerDebugging>True</EnableSdkContainerDebugging>
-		<ContainerBaseImage>mcr.microsoft.com/dotnet/aspnet:8.0-nanoserver-1809</ContainerBaseImage>
+		<RuntimeIdentifiers>win-x64;linux-x64</RuntimeIdentifiers>
 		<UserSecretsId>fb562352-df41-4ad2-b752-06c45e3357da</UserSecretsId>
 		<DockerfileContext>.</DockerfileContext>
 	</PropertyGroup>
