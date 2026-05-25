@@ -3,9 +3,30 @@
   align-items: center;
   justify-content: center;
   min-height: 100%;
-  background: var(--bg-primary);
   padding: 1rem;
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  position: relative;
 }
+
+.card {
+  position: relative;
+  z-index: 1;
+}
+
+/* overlay */
+.container::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 0;
+}
+
+
 
 .card {
   background: var(--bg-surface);

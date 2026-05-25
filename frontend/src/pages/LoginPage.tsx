@@ -1,35 +1,45 @@
-import { useState, type FormEvent } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { login } from '../api/auth';
-import { useAuthStore } from '../store/authStore';
-import styles from './LoginPage.module.css';
+import { useState, type FormEvent } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { login } from "../api/auth";
+import { useAuthStore } from "../store/authStore";
+import styles from "./LoginPage.module.css";
 
 export default function LoginPage() {
   const navigate = useNavigate();
   const setAuth = useAuthStore((s) => s.setAuth);
 
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError("");
     setLoading(true);
     try {
       const data = await login({ username, password });
-      setAuth({ username: data.username, displayName: data.displayName, role: data.role }, data.token);
-      navigate('/chat');
+      setAuth(
+        {
+          username: data.username,
+          displayName: data.displayName,
+          role: data.role,
+        },
+        data.token,
+      );
+      navigate("/chat");
     } catch (err: any) {
-      setError(err.response?.data?.message ?? 'Usuário ou senha incorretos.');
+      setError(err.response?.data?.message ?? "Usuário ou senha incorretos.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className={styles.container}>
+    <div
+      className={styles.container}
+      style={{ backgroundImage: "url(/backgrounds/fundoLoginPage.jpg)" }}
+    >
       <div className={styles.card}>
         <div className={styles.logo}>
           <h1 className={styles.title}>MartChat</h1>
@@ -66,7 +76,7 @@ export default function LoginPage() {
           {error && <p className={styles.error}>{error}</p>}
 
           <button type="submit" className={styles.btn} disabled={loading}>
-            {loading ? 'Entrando...' : 'Entrar'}
+            {loading ? "Entrando..." : "Entrar"}
           </button>
         </form>
 

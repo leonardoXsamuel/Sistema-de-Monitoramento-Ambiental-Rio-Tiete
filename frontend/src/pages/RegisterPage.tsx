@@ -1,38 +1,50 @@
-import { useState, type FormEvent } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { register } from '../api/auth';
-import { useAuthStore } from '../store/authStore';
-import type { UserRole } from '../types/types';
-import styles from './LoginPage.module.css';
+import { useState, type FormEvent } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { register } from "../api/auth";
+import { useAuthStore } from "../store/authStore";
+import type { UserRole } from "../types/types";
+import styles from "./LoginPage.module.css";
 
 export default function RegisterPage() {
   const navigate = useNavigate();
   const setAuth = useAuthStore((s) => s.setAuth);
 
-  const [username, setUsername] = useState('');
-  const [displayName, setDisplayName] = useState('');
-  const [password, setPassword] = useState('');
-  const [role, setRole] = useState<UserRole>('Inspetor');
-  const [error, setError] = useState('');
+  const [username, setUsername] = useState("");
+  const [displayName, setDisplayName] = useState("");
+  const [password, setPassword] = useState("");
+  const [role, setRole] = useState<UserRole>("Inspetor");
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError("");
     setLoading(true);
     try {
       const data = await register({ username, password, displayName, role });
-      setAuth({ username: data.username, displayName: data.displayName, role: data.role }, data.token);
-      navigate('/chat');
+      setAuth(
+        {
+          username: data.username,
+          displayName: data.displayName,
+          role: data.role,
+        },
+        data.token,
+      );
+      navigate("/chat");
     } catch (err: any) {
-      setError(err.response?.data?.message ?? 'Erro ao cadastrar. Tente novamente.');
+      setError(
+        err.response?.data?.message ?? "Erro ao cadastrar. Tente novamente.",
+      );
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className={styles.container}>
+    <div
+      className={styles.container}
+      style={{ backgroundImage: "url(/backgrounds/fundoRegisterPage.jpg)" }}
+    >
       <div className={styles.card}>
         <div className={styles.logo}>
           <h1 className={styles.title}>MartChat</h1>
@@ -83,11 +95,11 @@ export default function RegisterPage() {
               value={role}
               onChange={(e) => setRole(e.target.value as UserRole)}
               style={{
-                background: 'var(--bg-elevated)',
-                border: '1px solid var(--border)',
-                borderRadius: 'var(--radius)',
-                padding: '0.625rem 0.875rem',
-                color: 'var(--text-primary)',
+                background: "var(--bg-elevated)",
+                border: "1px solid var(--border)",
+                borderRadius: "var(--radius)",
+                padding: "0.625rem 0.875rem",
+                color: "var(--text-primary)",
               }}
             >
               <option value="Inspetor">Inspetor</option>
@@ -98,7 +110,7 @@ export default function RegisterPage() {
           {error && <p className={styles.error}>{error}</p>}
 
           <button type="submit" className={styles.btn} disabled={loading}>
-            {loading ? 'Cadastrando...' : 'Criar conta'}
+            {loading ? "Cadastrando..." : "Criar conta"}
           </button>
         </form>
 
